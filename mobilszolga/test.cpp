@@ -1,34 +1,40 @@
 #include <iostream>
-#include <fstream>
-#include "ugyfel.h"
-#include "adatosszegzes.h"
-
-using namespace std;
+#include "ugyfel.hpp" // Az Ugyfel osztály fejlécfájlja
+#include "adatosszegzes.hpp" // Az adatösszegzésért felelős osztály fejlécfájlja
+#include "dijcsomag.hpp"
+#include "dijcsomagmeghatarozo.hpp"
+#include "forgalom.hpp"
+#include "forgalombeolvaso.hpp"
+#include "forgalomitem.hpp"
+#include "ugyfelbeolvaso.hpp"
+#include "ugyfelitem.hpp"
 
 int main() {
-    // Ügyfelek létrehozása
-    DijCsomag* csomag1 = new SMSMax();
-    DijCsomag* csomag2 = new Alap();
-    Ugyfel ugyfel1(123456789, "Kovács Péter", "Budapest", csomag1);
-    Ugyfel ugyfel2(987654321, "Nagy Anna", "Debrecen", csomag2);
+    DijCsomagMeghatarozo d;
+    UgyfelBeolvaso ugyfelBeolvaso(d);
+    ForgalomBeolvaso forgalomBeolvaso;
 
-    // Havi forgalmi adatok beolvasása
-    ifstream adatokFile("havi_adatok.txt");
-    if (!adatokFile.is_open()) {
-        cerr << "Hiba: Nem sikerült megnyitni a fájlt!" << endl;
-        return 1;
-    }
+    UgyfelKereso ugyfelKereso;
 
-    int telszam, smsdb, percek;
-    while (adatokFile >> telszam >> smsdb >> percek) {
-        // Ügyfél keresése a megfelelő telefonszámmal
-        // És hívás a dijszamitas függvényre
-    }
-    adatokFile.close();
+    AdatOsszegzes adatOsszegzes(ugyfelBeolvaso, forgalomBeolvaso, ugyfelKereso);
 
-    // Díjszámítás és eredmények kiírása
-    AdatOsszegzes adatOsszegzes;
-    adatOsszegzes.osszegez();
+    adatOsszegzes.osszegez("ugyfelek.txt", "havi_adatok.txt", "eredmenyek.txt");
 
     return 0;
 }
+
+/*int main() {
+    DijCsomagMeghatarozo d;
+
+    UgyfelBeolvaso ugyfelBeolvaso(d);
+    ForgalomBeolvaso forgalomBeolvaso;
+    AdatOsszegzes adatOsszegzes(ugyfelBeolvaso, forgalomBeolvaso);
+
+    // Adatösszegzés elvégzése
+    adatOsszegzes.osszegez("ugyfelek.txt", "havi_adatok.txt", "eredmenyek.txt");
+
+    // Memóriakezelés: felszabadítjuk a dinamikusan foglalt memóriát
+
+
+    return 0;
+}*/
